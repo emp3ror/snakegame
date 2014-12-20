@@ -1,6 +1,7 @@
 
 var canvas = document.getElementById("snakeboard");
 var ctx = canvas.getContext("2d");
+var regularMove;
 
 var snake = function () {
 	this.sizeSegment = 10;
@@ -18,7 +19,19 @@ var snake = function () {
 	this.snakeMovementTime = 200; //millisecond
 	this.interrupt = true; //interrupt to start and stop loop
 	this.totalLinearSegments = this.sizeOfCanvas/this.sizeSegment;
+	this.initialPostions = [[5,5],[4,5],[3,5],[2,5]];
 	this.positions = [[5,5],[4,5],[3,5],[2,5]];
+	this.resetSnake = function () {
+		clearInterval(regularMove);
+		this.positions.slice(0,0);
+		this.positions = this.initialPostions.slice(0);
+		console.log(this.initialPostions);
+		console.log("positions "+this.postions);
+		ctx.clearRect(0,0,this.width,this.height);
+			ctx.width= this.width;
+			ctx.height = this.height;
+			this.createSnake();
+	}
 	this.move = function (direction) {
 		var storePosition = this.positions.slice(0);
 		// console.log(storePosition);
@@ -41,13 +54,16 @@ var snake = function () {
 				this.positions[0] = [this.positions[0][0],this.positions[0][1]+1];
 			};
 
-			console.log("smth"+this.totalLinearSegments);
+			console.log("regularMove"+this.totalLinearSegments);
 			if (this.positions[0][0]<0 || this.positions[0][1]<0 || this.positions[0][0]===this.totalLinearSegments || this.positions[0][1]===this.totalLinearSegments) {
 				alert("dead by strike border");
+				this.resetSnake();
+
 			} else if (contains(storePosition,this.positions[0])) {
 				/*console.log(this.positions[0]);
 				console.log(storePosition);*/
 				alert("dead by own");
+				this.resetSnake();
 				// alert("is inside");
 			};
 			
@@ -88,10 +104,11 @@ var snake = function () {
 var snake1 = new snake();
 snake1.createSnake();
 
-var smth = setInterval(function () {
+/*var regularMove = setInterval(function () {
 			snake1.move();
-			clearInterval(smth);
-	},snake1.snakeMovementTime);
+			clearInterval(regularMove);
+	},snake1.snakeMovementTime);*/
+
 
 
 
@@ -114,25 +131,25 @@ function contains(a, obj) {
 */
 
 $(document).keypress(function (event) {
-	clearInterval(smth);
+	clearInterval(regularMove);
 	if (event.keyCode===37) {
 		
-		smth = setInterval(function () {
+		regularMove = setInterval(function () {
 			snake1.move("left");
 		},snake1.snakeMovementTime);
 	} else if (event.keyCode===38) {
 		// snake1.move("up");
-		smth = setInterval(function () {
+		regularMove = setInterval(function () {
 			snake1.move("up");
 	},snake1.snakeMovementTime);
 	} else if (event.keyCode===39) {
 		// snake1.move("right");
-		smth = setInterval(function () {
+		regularMove = setInterval(function () {
 			snake1.move("right");
 	},snake1.snakeMovementTime);
 	} else if (event.keyCode===40) {
 		// snake1.move("down");
-		smth = setInterval(function () {
+		regularMove = setInterval(function () {
 			snake1.move("down");
 	},snake1.snakeMovementTime);
 	}
