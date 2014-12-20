@@ -36,7 +36,12 @@ var snake = function () {
 				this.positions[0] = [this.positions[0][0],this.positions[0][1]-1];	
 			} else if (direction==="down") {
 				this.positions[0] = [this.positions[0][0],this.positions[0][1]+1];
-			} 
+			};
+
+			console.log("smth"+this.totalLinearSegments);
+			if (this.positions[0][0]<0 || this.positions[0][1]<0 || this.positions[0][0]===this.totalLinearSegments || this.positions[0][1]===this.totalLinearSegments) {
+				alert("dead :(");
+			};
 			
 			for (var i = 1; i < this.positions.length; i++) {
 				this.positions[i] = storePosition[i-1];
