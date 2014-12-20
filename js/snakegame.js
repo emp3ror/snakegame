@@ -2,11 +2,6 @@
 var canvas = document.getElementById("snakeboard");
 var ctx = canvas.getContext("2d");
 
-var snake = {
-	
-
-}
-
 var snake = function () {
 	this.sizeSegment = 10;
 	this.startSegments = 4;
@@ -40,7 +35,12 @@ var snake = function () {
 
 			console.log("smth"+this.totalLinearSegments);
 			if (this.positions[0][0]<0 || this.positions[0][1]<0 || this.positions[0][0]===this.totalLinearSegments || this.positions[0][1]===this.totalLinearSegments) {
-				alert("dead :(");
+				alert("dead by strike border");
+			} else if (contains(storePosition,this.positions[0])) {
+				/*console.log(this.positions[0]);
+				console.log(storePosition);*/
+				alert("dead by own");
+				// alert("is inside");
 			};
 			
 			for (var i = 1; i < this.positions.length; i++) {
@@ -72,6 +72,15 @@ var snake = function () {
 
 var snake1 = new snake();
 snake1.createSnake();
+
+function contains(a, obj) {
+    for (var i = 0; i < a.length; i++) {
+        if (a[i][0] === obj[0] && a[i][1]=== obj[1]) {
+            return true;
+        }
+    }
+    return false;
+}
 
 
 /*
