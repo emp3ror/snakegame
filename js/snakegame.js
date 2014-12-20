@@ -15,11 +15,19 @@ var snake = function () {
 	this.width = 500;
 	this.height = 500;
 	this.sizeOfCanvas = 500;
+	this.snakeMovementTime = 200; //millisecond
+	this.interrupt = true; //interrupt to start and stop loop
 	this.totalLinearSegments = this.sizeOfCanvas/this.sizeSegment;
 	this.positions = [[5,5],[4,5],[3,5],[2,5]];
 	this.move = function (direction) {
 		var storePosition = this.positions.slice(0);
 		// console.log(storePosition);
+		if (typeof direction === "undefined") {
+			direction = this.head;
+		} else {
+			this.interrupt = true;
+		}
+
 		if (direction==this.oppositeHead[this.head]) {
 
 		} else {
@@ -51,6 +59,10 @@ var snake = function () {
 			ctx.height = this.height;
 			this.createSnake();
 			this.head = direction;
+			if (this.interrupt===true) {
+				this.interrupt=false;
+				// this.regularMove(this.snakeMovementTime);
+			};
 		}
 	};
 	this.createSnake = function () {
@@ -67,11 +79,22 @@ var snake = function () {
 				ctx.strokeRect(x,y, this.sizeSegment,this.sizeSegment);
 			ctx.restore();
 		};
-	}
+	};
+
+
+	
 }
 
 var snake1 = new snake();
 snake1.createSnake();
+
+var smth = setInterval(function () {
+			snake1.move();
+			clearInterval(smth);
+	},snake1.snakeMovementTime);
+
+
+
 
 function contains(a, obj) {
     for (var i = 0; i < a.length; i++) {
@@ -91,13 +114,27 @@ function contains(a, obj) {
 */
 
 $(document).keypress(function (event) {
+	clearInterval(smth);
 	if (event.keyCode===37) {
-		snake1.move("left");
+		
+		smth = setInterval(function () {
+			snake1.move("left");
+		},snake1.snakeMovementTime);
 	} else if (event.keyCode===38) {
-		snake1.move("up");
+		// snake1.move("up");
+		smth = setInterval(function () {
+			snake1.move("up");
+	},snake1.snakeMovementTime);
 	} else if (event.keyCode===39) {
-		snake1.move("right");
+		// snake1.move("right");
+		smth = setInterval(function () {
+			snake1.move("right");
+	},snake1.snakeMovementTime);
 	} else if (event.keyCode===40) {
-		snake1.move("down");
+		// snake1.move("down");
+		smth = setInterval(function () {
+			snake1.move("down");
+	},snake1.snakeMovementTime);
 	}
+
 })
