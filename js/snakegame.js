@@ -39,7 +39,7 @@ var snake = function () {
 
 		lastScore = score;
 		score = 0;
-		showLastScore();
+		// showLastScore();
 	}
 
 	this.move = function (direction) {
@@ -142,9 +142,9 @@ var snake = function () {
 	}
 
 	this.eatingFood = function () {
-		console.log("eatingFood");
+		/*console.log("eatingFood");
 		console.log(this.positions);
-		console.log(this.foodCoordinates);
+		console.log(this.foodCoordinates);*/
 		return contains(this.positions, this.foodCoordinates);
 	}
 
@@ -208,12 +208,12 @@ function scoreUp () {
 	$(".sidebar .score").text(text);
 }
 
-function showLastScore () {
-	var score = lastScore*10;
-	var text = "score "+score;
-	$(".sidebar .lastScore").text(text);
-	$(".sidebar .msg").show();
-}
+// function showLastScore () {
+// 	// var score = lastScore*10;
+// 	// var text = "score "+score;
+// 	// $(".sidebar .lastScore").text(text);
+// 	$(".sidebar .msg").show();
+// }
 
 /*
 * keyCode = 37 // left arrow

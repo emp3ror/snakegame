@@ -20,17 +20,17 @@ body {
 	position: relative;
 	display: block;
 	margin: auto;
-	/*margin-top: 50px;*/
+	margin-top: 50px;
 	width: 85%;
-	/*background: #4353DB;*/
-	/*color: #fff;*/
-	/*font-size: 2em;*/
+	background: #4353DB;
+	color: #fff;
+	font-size: 2em;
 	padding: 10px;
 	border-radius: 10px;
 }
 
 .sidebar .msg {
-	display: none;
+	/*display: none;*/
 }
 
 .sidebar .lastScore {
