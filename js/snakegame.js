@@ -3,6 +3,8 @@ var canvas = document.getElementById("snakeboard");
 var ctx = canvas.getContext("2d");
 var regularMove;
 
+var score=0,lastScore=0; //store score
+
 var snake = function () {
 	this.sizeSegment = 10;
 	this.startSegments = 4;
@@ -34,6 +36,10 @@ var snake = function () {
 			ctx.width= this.width;
 			ctx.height = this.height;
 			this.createSnake();
+
+		lastScore = score;
+		score = 0;
+		showLastScore();
 	}
 
 	this.move = function (direction) {
@@ -60,13 +66,13 @@ var snake = function () {
 
 			// console.log("regularMove"+this.totalLinearSegments);
 			if (this.positions[0][0]<0 || this.positions[0][1]<0 || this.positions[0][0]===this.totalLinearSegments || this.positions[0][1]===this.totalLinearSegments) {
-				alert("dead by strike border");
+				// alert("dead by strike border");
 				this.resetSnake();
 
 			} else if (contains(storePosition,this.positions[0])) {
 				/*console.log(this.positions[0]);
 				console.log(storePosition);*/
-				alert("dead by own");
+				// alert("dead by own");
 				this.resetSnake();
 				// alert("is inside");
 			} else {
@@ -154,6 +160,7 @@ var snake = function () {
 				if (lastSegment[0]===this.foodCoordinates[0] && lastSegment[1]===this.foodCoordinates[1] ) {
 					this.foodAte = true;
 					this.newFood();
+					scoreUp();
 				};
 				
 				console.log("foodProcess1");
@@ -194,6 +201,18 @@ function contains(totalArray, hasIt) {
     return false;
 }
 
+function scoreUp () {
+	score++;
+	var addup = score*10;
+	var text = "score "+addup;
+	$(".sidebar .score").text(text);
+}
+
+function showLastScore () {
+	var score = lastScore*10;
+	var text = "score "+score;
+	$(".sidebar .lastScore").text(text).show();	
+}
 
 /*
 * keyCode = 37 // left arrow
