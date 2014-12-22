@@ -118,7 +118,7 @@ var snake = function () {
 	*/
 	this.newFood = function () {
 		this.foodCoordinates = generateRandom(this.totalLinearSegments-1,this.totalLinearSegments-1,this.positions);
-		console.log(this.foodCoordinates);
+		// console.log(this.foodCoordinates);
 		this.createFood();
 	};
 
@@ -127,7 +127,7 @@ var snake = function () {
 			ctx.fillStyle = "#EA198C";
 			var x = this.foodCoordinates[0]*this.sizeSegment;
 			var y = this.foodCoordinates[1]*this.sizeSegment;
-			console.log(x+" "+y);
+			// console.log(x+" "+y);
 			ctx.fillRect(x,y, this.sizeSegment,this.sizeSegment);
 			ctx.strokeStyle = "#fff";
 			ctx.lineWidth   = 1;
@@ -136,23 +136,26 @@ var snake = function () {
 	}
 
 	this.eatingFood = function () {
+		console.log("eatingFood");
+		console.log(this.positions);
+		console.log(this.foodCoordinates);
 		return contains(this.positions, this.foodCoordinates);
 	}
 
 	this.foodProcess = function () {
-		console.log(this.foodCoordinates.length);
+		// console.log(this.foodCoordinates.length);
 		if (this.foodCoordinates.length<=0) {
 			this.newFood();
 		} else {
 				
-			if (this.eatingFood==true) {
+			if (this.eatingFood()==true) {
 				var len = this.positions.length;
-				var lastSegment = this.positions[length-1];
+				var lastSegment = this.positions[len-1];
 				if (lastSegment[0]===this.foodCoordinates[0] && lastSegment[1]===this.foodCoordinates[1] ) {
 					this.foodAte = true;
 					this.newFood();
 				};
-				alert("")
+				
 				console.log("foodProcess1");
 			} else {
 				this.createFood();
@@ -204,7 +207,7 @@ function contains(totalArray, hasIt) {
 */
 
 $(document).keypress(function (event) {
-	console.log(event.charCode);
+	// console.log(event.charCode);
 	clearInterval(regularMove);
 	if (event.keyCode===37 || event.charCode===97) {
 		
