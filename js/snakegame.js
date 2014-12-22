@@ -22,17 +22,20 @@ var snake = function () {
 	this.initialPostions = [[5,5],[4,5],[3,5],[2,5]];
 	this.positions = [[5,5],[4,5],[3,5],[2,5]];
 	this.foodCoordinates = []; //food coordinates initialization
+	this.foodAte = false; //to add tail for snake
+
 	this.resetSnake = function () {
 		clearInterval(regularMove);
 		this.positions.slice(0,0);
 		this.positions = this.initialPostions.slice(0);
-		console.log(this.initialPostions);
-		console.log("positions "+this.postions);
+		// console.log(this.initialPostions);
+		// console.log("positions "+this.postions);
 		ctx.clearRect(0,0,this.width,this.height);
 			ctx.width= this.width;
 			ctx.height = this.height;
 			this.createSnake();
 	}
+
 	this.move = function (direction) {
 		var storePosition = this.positions.slice(0);
 		// console.log(storePosition);
@@ -55,7 +58,7 @@ var snake = function () {
 				this.positions[0] = [this.positions[0][0],this.positions[0][1]+1];
 			};
 
-			console.log("regularMove"+this.totalLinearSegments);
+			// console.log("regularMove"+this.totalLinearSegments);
 			if (this.positions[0][0]<0 || this.positions[0][1]<0 || this.positions[0][0]===this.totalLinearSegments || this.positions[0][1]===this.totalLinearSegments) {
 				alert("dead by strike border");
 				this.resetSnake();
@@ -66,20 +69,28 @@ var snake = function () {
 				alert("dead by own");
 				this.resetSnake();
 				// alert("is inside");
-			};
-			
-			for (var i = 1; i < this.positions.length; i++) {
-				this.positions[i] = storePosition[i-1];
-			};
-			ctx.clearRect(0,0,this.width,this.height);
-			ctx.width= this.width;
-			ctx.height = this.height;
-			this.createSnake();
-			this.head = direction;
-			if (this.interrupt===true) {
-				this.interrupt=false;
+			} else {
+				for (var i = 1; i < this.positions.length; i++) {
+					this.positions[i] = storePosition[i-1];
+				};
+				ctx.clearRect(0,0,this.width,this.height);
+				ctx.width= this.width;
+				ctx.height = this.height;
+				this.createSnake();
+				this.head = direction;
+				if (this.interrupt===true) {
+					this.interrupt=false;
 				// this.regularMove(this.snakeMovementTime);
-			};
+				};
+
+				if (this.foodAte) {
+					this.positions.push(this.foodCoordinates);
+					this.foodAte = false;
+				}
+			}
+			
+			
+			
 		}
 	};
 	this.createSnake = function () {
@@ -96,14 +107,17 @@ var snake = function () {
 				ctx.strokeRect(x,y, this.sizeSegment,this.sizeSegment);
 			ctx.restore();
 
-			this.createFood();
+			// this.createFood();
+
 		};
+
+		this.foodProcess();
 	};
 
 	/*method for food
 	*/
 	this.newFood = function () {
-		this.foodCoordinates = generateRandom(this.totalLinearSegments,this.totalLinearSegments,this.positions);
+		this.foodCoordinates = generateRandom(this.totalLinearSegments-1,this.totalLinearSegments-1,this.positions);
 		console.log(this.foodCoordinates);
 		this.createFood();
 	};
@@ -119,6 +133,31 @@ var snake = function () {
 			ctx.lineWidth   = 1;
 			ctx.strokeRect(x,y, this.sizeSegment,this.sizeSegment);
 		ctx.restore();
+	}
+
+	this.eatingFood = function () {
+		return contains(this.positions, this.foodCoordinates);
+	}
+
+	this.foodProcess = function () {
+		console.log(this.foodCoordinates.length);
+		if (this.foodCoordinates.length<=0) {
+			this.newFood();
+		} else {
+				
+			if (this.eatingFood==true) {
+				var len = this.positions.length;
+				var lastSegment = this.positions[length-1];
+				if (lastSegment[0]===this.foodCoordinates[0] && lastSegment[1]===this.foodCoordinates[1] ) {
+					this.foodAte = true;
+					this.newFood();
+				};
+				alert("")
+				console.log("foodProcess1");
+			} else {
+				this.createFood();
+			}
+		}
 	}
 
 }
@@ -140,12 +179,12 @@ function generateRandom (totalX,totalY,arraySeg) {
 
 var snake1 = new snake();
 snake1.createSnake();
-snake1.newFood();
+// snake1.newFood();
 
 
-function contains(a, obj) {
-    for (var i = 0; i < a.length; i++) {
-        if (a[i][0] === obj[0] && a[i][1]=== obj[1]) {
+function contains(totalArray, hasIt) {
+    for (var i = 0; i < totalArray.length; i++) {
+        if (totalArray[i][0] === hasIt[0] && totalArray[i][1]=== hasIt[1]) {
             return true;
         }
     }
@@ -158,26 +197,31 @@ function contains(a, obj) {
 * keyCode = 38 // up arrow
 * keyCode = 39 // right arrow
 * keyCode = 40 // down arrow
+* charCode = 97 // letter A
+* charCode = 115 // letter s
+* charCode = 100 // letter d
+* charCode = 119 // letter w
 */
 
 $(document).keypress(function (event) {
+	console.log(event.charCode);
 	clearInterval(regularMove);
-	if (event.keyCode===37) {
+	if (event.keyCode===37 || event.charCode===97) {
 		
 		regularMove = setInterval(function () {
 			snake1.move("left");
 		},snake1.snakeMovementTime);
-	} else if (event.keyCode===38) {
+	} else if (event.keyCode===38 || event.charCode===119) {
 		// snake1.move("up");
 		regularMove = setInterval(function () {
 			snake1.move("up");
 	},snake1.snakeMovementTime);
-	} else if (event.keyCode===39) {
+	} else if (event.keyCode===39 || event.charCode===100) {
 		// snake1.move("right");
 		regularMove = setInterval(function () {
 			snake1.move("right");
 	},snake1.snakeMovementTime);
-	} else if (event.keyCode===40) {
+	} else if (event.keyCode===40 || event.charCode===115) {
 		// snake1.move("down");
 		regularMove = setInterval(function () {
 			snake1.move("down");
