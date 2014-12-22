@@ -17,12 +17,28 @@ By mjt
 	<link rel="stylesheet" href="style/styles.css">
 </head>	
 <body>
+	<!-- fb plugin starts -->
+	<div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&appId=479782738772651&version=v2.0";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script>
+<!-- fb plugin ends -->
+
 	<canvas width="500px" height="500px" id="snakeboard">
 		why no update browser, do it quick ;)
 	</canvas>
 	<div class="sidebar">
 		<span class="score">score : 0</span>
-		<span class="lastScore">score : 0</span>
+		<div class="msg">
+			<span class="lastScore">score : 0</span>
+			<div class="msgScore">comment ur score n win prize :D</div>	
+			<div class="fb-comments" data-href="http://emp3ror.github.io/snakegame/" data-width="300" data-numposts="5" data-colorscheme="light"></div>
+		</div>
+		
 	</div>
 	
 

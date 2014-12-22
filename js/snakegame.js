@@ -211,7 +211,8 @@ function scoreUp () {
 function showLastScore () {
 	var score = lastScore*10;
 	var text = "score "+score;
-	$(".sidebar .lastScore").text(text).show();	
+	$(".sidebar .lastScore").text(text);
+	$(".sidebar .msg").show();
 }
 
 /*
