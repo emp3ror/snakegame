@@ -16,11 +16,12 @@ var snake = function () {
 	this.width = 500;
 	this.height = 500;
 	this.sizeOfCanvas = 500;
-	this.snakeMovementTime = 200; //millisecond
+	this.snakeMovementTime = 100; //millisecond
 	this.interrupt = true; //interrupt to start and stop loop
 	this.totalLinearSegments = this.sizeOfCanvas/this.sizeSegment;
 	this.initialPostions = [[5,5],[4,5],[3,5],[2,5]];
 	this.positions = [[5,5],[4,5],[3,5],[2,5]];
+	this.foodCoordinates = []; //food coordinates initialization
 	this.resetSnake = function () {
 		clearInterval(regularMove);
 		this.positions.slice(0,0);
@@ -44,7 +45,7 @@ var snake = function () {
 		if (direction==this.oppositeHead[this.head]) {
 
 		} else {
-			if (direction==="right") {
+			if (direction==="right") {var storePosition = this.positions.slice(0);
 				this.positions[0] = [this.positions[0][0]+1,this.positions[0][1]];	
 			} else if (direction==="left") {
 				this.positions[0] = [this.positions[0][0]-1,this.positions[0][1]];	
@@ -94,23 +95,52 @@ var snake = function () {
 				ctx.lineWidth   = 1;
 				ctx.strokeRect(x,y, this.sizeSegment,this.sizeSegment);
 			ctx.restore();
+
+			this.createFood();
 		};
 	};
 
+	/*method for food
+	*/
+	this.newFood = function () {
+		this.foodCoordinates = generateRandom(this.totalLinearSegments,this.totalLinearSegments,this.positions);
+		console.log(this.foodCoordinates);
+		this.createFood();
+	};
 
-	
+	this.createFood = function () {
+		ctx.save();
+			ctx.fillStyle = "#EA198C";
+			var x = this.foodCoordinates[0]*this.sizeSegment;
+			var y = this.foodCoordinates[1]*this.sizeSegment;
+			console.log(x+" "+y);
+			ctx.fillRect(x,y, this.sizeSegment,this.sizeSegment);
+			ctx.strokeStyle = "#fff";
+			ctx.lineWidth   = 1;
+			ctx.strokeRect(x,y, this.sizeSegment,this.sizeSegment);
+		ctx.restore();
+	}
+
 }
+
+/*generates the random coordinates which is not in the segments of snake (arraySeg) and within x and y*/
+function generateRandom (totalX,totalY,arraySeg) {
+	var minRange = 0; //min x or y , 
+	var rndX = Math.floor((Math.random()*(totalX-minRange+ 1)))+minRange;
+	var rndY = Math.floor((Math.random()*(totalY-minRange+ 1)))+minRange;
+	if (contains(arraySeg,[rndX,rndY])) {
+		generateRandom(totalX,totalY,arraySeg); //google recursion :P
+	} else {
+		return [rndX,rndY];
+	}
+}
+
+
+
 
 var snake1 = new snake();
 snake1.createSnake();
-
-/*var regularMove = setInterval(function () {
-			snake1.move();
-			clearInterval(regularMove);
-	},snake1.snakeMovementTime);*/
-
-
-
+snake1.newFood();
 
 
 function contains(a, obj) {
